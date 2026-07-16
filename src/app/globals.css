@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --color-ink: #050b14;
+  --color-green: #00d95f;
+  --color-green-strong: #00ed6a;
+  --color-green-deep: #008f43;
+  --color-foreground: #f8fafc;
+  --color-muted: #aab4c1;
+  --color-faint: #738092;
+  --color-border: rgba(255, 255, 255, 0.11);
+  --color-border-strong: rgba(0, 217, 95, 0.5);
+  --color-panel: rgba(10, 20, 34, 0.82);
+  --color-panel-strong: #0b1523;
+  --radius-card: 1.25rem;
+}
+
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html, body { overflow-x: hidden; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: #050b14;
+  color: #f8fafc;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid #00d95f;
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+button, a { touch-action: manipulation; }
+button { cursor: pointer; }
+.glass-panel { background: rgba(10,20,34,.94); border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(18px); }
+
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  min-height: calc(100svh - 80px);
+  background-color: #050b14;
+  background-image: url('/assets/codexa/homepage-products/hero-produtos-digitais.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(5,11,20,.22) 0%, rgba(5,11,20,.08) 44%, rgba(5,11,20,0) 70%);
+}
+
+.light-section { background: #f8fafc; color-scheme: light; }
+.section-eyebrow { color: #008f43; font-size: .75rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+.button-primary, .button-secondary {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: .6rem;
+  border-radius: .75rem;
+  padding: .8rem 1.25rem;
+  font-size: .875rem;
+  font-weight: 700;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.button-primary { border: 1px solid #00d95f; background: #00d95f; color: #031009; box-shadow: 0 12px 34px rgba(0,217,95,.17); }
+.button-primary:hover { background: #00ed6a; border-color: #00ed6a; transform: translateY(-1px); }
+.button-secondary { border: 1px solid rgba(255,255,255,.25); background: rgba(5,11,20,.25); color: #fff; }
+.button-secondary:hover { border-color: rgba(0,217,95,.65); color: #00ed6a; }
+.header-cta { min-height: 44px; width: auto !important; padding: .65rem 1rem; }
+.product-card { border: 1px solid rgba(15,23,42,.12); box-shadow: 0 14px 38px rgba(15,23,42,.1); }
+.product-card:hover { border-color: rgba(0,143,67,.48); transform: translateY(-3px); }
+.founder-card { box-shadow: 0 18px 45px rgba(15,23,42,.08); }
+.contact-cta {
+  position: relative;
+  overflow: hidden;
+  background-color: #06101c;
+  background-image: linear-gradient(90deg, rgba(5,11,20,.96) 0%, rgba(5,11,20,.76) 42%, rgba(5,11,20,.15) 100%), url('/assets/codexa/homepage-products/background-cta-contato.png');
+  background-size: cover;
+  background-position: 68% center;
+}
+
+@media (max-width: 639px) {
+  .button-primary, .button-secondary { width: 100%; }
+  .hero-section {
+    min-height: calc(100svh - 72px);
+    background-position: 58% center;
+  }
+  .hero-section::before {
+    background: linear-gradient(90deg, rgba(5,11,20,.82) 0%, rgba(5,11,20,.58) 62%, rgba(5,11,20,.28) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
