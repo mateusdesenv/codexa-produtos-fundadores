@@ -12,8 +12,9 @@ import { SiteFooter } from "@/components/sections/site-footer";
 export default function HomePage() {
   return (
     <div id="top" className="flex min-h-dvh flex-col">
+      <a href="#conteudo" className="skip-link">Pular para o conteúdo</a>
       <SiteHeader />
-      <main className="flex-1">
+      <main id="conteudo" className="flex-1" tabIndex={-1}>
         <Hero />
         <ProductsSection />
         <FoundersSection />

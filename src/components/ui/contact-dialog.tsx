@@ -12,6 +12,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type FormEvent,
 } from "react";
@@ -39,6 +40,8 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
   const [productId, setProductId] = useState<string>("");
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const open = useCallback((product?: string) => {
     setProductId(product ?? "");
@@ -51,14 +54,35 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isOpen) return;
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+    window.requestAnimationFrame(() => {
+      dialogRef.current?.querySelector<HTMLElement>("input, button, select, textarea")?.focus();
+    });
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") close();
+      if (event.key === "Tab" && dialogRef.current) {
+        const focusable = Array.from(
+          dialogRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        const first = focusable[0];
+        const last = focusable.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      previousFocusRef.current?.focus();
     };
   }, [isOpen, close]);
 
@@ -117,6 +141,7 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
             />
 
             <motion.div
+              ref={dialogRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby="contact-title"
@@ -130,7 +155,7 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={close}
                 aria-label="Fechar formulário"
-                className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full text-muted transition-colors hover:bg-foreground/10 hover:text-foreground"
+                className="absolute right-3 top-3 grid h-11 w-11 place-items-center rounded-full text-muted transition-colors hover:bg-foreground/10 hover:text-foreground"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -140,7 +165,7 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
                   <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-green/15 text-green ring-1 ring-border-strong">
                     <Check className="h-7 w-7" />
                   </div>
-                  <h2 className="mt-5 text-xl font-bold text-foreground">
+                  <h2 id="contact-title" className="mt-5 text-xl font-bold text-foreground">
                     Recebemos seu contato
                   </h2>
                   <p className="mx-auto mt-2 max-w-sm text-sm text-muted">

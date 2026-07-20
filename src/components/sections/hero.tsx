@@ -2,27 +2,32 @@
 
 import { ArrowRight } from "lucide-react";
 import { useContact } from "@/components/ui/contact-dialog";
+import { HeroParticleOrb } from "@/components/sections/hero-particle-orb";
 
 export function Hero() {
   const { open } = useContact();
   return (
-    <section className="hero-section flex px-5 py-24 sm:px-8 lg:px-12 2xl:px-20">
-      <div className="mx-auto flex w-full max-w-[1280px] items-center">
-        <div className="relative z-10 max-w-[650px]">
-          <h1 className="max-w-[650px] text-balance text-4xl font-semibold leading-[1.06] tracking-[-0.04em] text-white sm:text-5xl lg:text-[3.7rem]">
-            Produtos digitais que <span className="text-green">transformam</span> negócios.
+    <section className="hero-section" aria-labelledby="hero-title">
+      <HeroParticleOrb />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1216px] items-center">
+        <div className="max-w-[700px]">
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[.045] px-3.5 py-2 text-xs font-semibold uppercase tracking-[.16em] text-green-strong">
+            Produto · Software · Inteligência
+          </p>
+          <h1 id="hero-title" className="max-w-[700px] text-balance text-[2.8rem] font-semibold leading-[.98] tracking-[-0.055em] text-white sm:text-6xl lg:text-[4.75rem]">
+            Ideias que viram produtos. Produtos que geram <span className="text-green">impacto.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-            Na Codexa, criamos produtos, software e soluções digitais que simplificam operações, conectam pessoas e impulsionam resultados reais.
+          <p className="mt-7 max-w-[590px] text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+            Criamos soluções digitais próprias para problemas reais — da estratégia ao código, com clareza, tecnologia e visão de longo prazo.
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#produtos" className="button-primary">Conhecer produtos <ArrowRight className="h-4 w-4" /></a>
-            <button type="button" onClick={() => open()} className="button-secondary">Falar com a Codexa <ArrowRight className="h-4 w-4" /></button>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <a href="#produtos" className="button-primary">Explorar produtos <ArrowRight className="h-4 w-4" aria-hidden="true" /></a>
+            <button type="button" onClick={() => open()} className="button-secondary">Conversar com a equipe</button>
           </div>
-          <p className="mt-10 flex items-center gap-3 text-sm text-slate-300">
-            <span className="h-2 w-2 rounded-full bg-green shadow-[0_0_12px_#00d95f]" />
-            Software com propósito. Produto com impacto.
-          </p>
+          <dl className="mt-12 flex flex-wrap gap-x-8 gap-y-4 border-t border-white/10 pt-6 text-sm">
+            <div><dt className="text-slate-500">Produtos ativos</dt><dd className="mt-1 font-semibold text-white">4 ecossistemas</dd></div>
+            <div><dt className="text-slate-500">Atuação</dt><dd className="mt-1 font-semibold text-white">Estratégia ao produto</dd></div>
+          </dl>
         </div>
       </div>
     </section>
