@@ -96,10 +96,7 @@ export function FoundersSection() {
                 }`}
               >
                 <span className="absolute left-7 top-7 h-px w-10 bg-green sm:left-10 sm:top-10 lg:left-14 lg:top-12" aria-hidden="true" />
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-strong">
-                  Cofundador · 0{index + 1}
-                </p>
-                <h3 className="mt-4 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                <h3 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                   {founder.name}
                 </h3>
                 <p className="mt-2 text-sm font-semibold text-green-strong">{founder.role}</p>
@@ -173,8 +170,17 @@ export function ContactCta() {
           </h2>
           <p className="mt-5 text-slate-300">Conte o desafio. A gente pensa o próximo passo com você.</p>
         </div>
-        <button type="button" onClick={() => open()} className="button-primary">
-          Iniciar uma conversa <ArrowRight className="h-4 w-4" aria-hidden="true" />
+        <button
+          id="contact-particle-target"
+          type="button"
+          onClick={() => open()}
+          className="contact-particle-target"
+          aria-label="Iniciar uma conversa com a Codexa"
+        >
+          <span className="sr-only">Iniciar uma conversa</span>
+          <span className="contact-particle-target__hint">
+            Conversar com a Codexa <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </span>
         </button>
       </div>
     </section>

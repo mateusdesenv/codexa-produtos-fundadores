@@ -18,8 +18,8 @@
 
 :root {
   color-scheme: dark;
-  --page-gutter: clamp(1.25rem, 4vw, 5rem);
-  --content-width: 76rem;
+  --page-gutter: 1.25rem;
+  --content-width: 90rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -55,7 +55,7 @@ button { cursor: pointer; }
 
 .site-section {
   position: relative;
-  padding: clamp(5rem, 9vw, 8rem) var(--page-gutter);
+  padding-block: clamp(5rem, 9vw, 8rem);
   background: #071019;
 }
 .site-section--alternate { background: #09131b; }
@@ -63,7 +63,12 @@ button { cursor: pointer; }
   content: ""; position: absolute; inset: auto var(--page-gutter) 0;
   height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,.09), transparent);
 }
-.section-shell { width: 100%; max-width: var(--content-width); margin-inline: auto; }
+.section-shell {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
 .section-eyebrow {
   display: inline-flex; align-items: center; gap: .6rem;
   color: #6cffaa; font-size: .72rem; font-weight: 750;
@@ -80,7 +85,7 @@ button { cursor: pointer; }
 .hero-section {
   position: relative; display: flex; overflow: hidden;
   min-height: max(43rem, 100svh);
-  padding: 8rem var(--page-gutter) 4rem;
+  padding-block: 8rem 4rem;
   background-color: #050a12;
   background-image:
     radial-gradient(circle at 76% 48%, rgba(32,232,120,.1), transparent 27rem),
@@ -104,7 +109,11 @@ button { cursor: pointer; }
   width: min(54vw, 760px); aspect-ratio: 1; transform: translateY(-50%);
   pointer-events: none; overflow: visible;
 }
-.hero-particle-orb__canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 24px rgba(32,232,120,.2)); }
+.hero-particle-orb__canvas {
+  position: fixed; inset: 0; z-index: 20; display: block;
+  width: 100vw; height: 100dvh; pointer-events: none;
+  filter: drop-shadow(0 0 24px rgba(32,232,120,.2));
+}
 .hero-particle-orb__glow { position: absolute; inset: 13%; border-radius: 50%; background: radial-gradient(circle, transparent 24%, rgba(32,232,120,.1) 47%, rgba(32,232,120,.025) 62%, transparent 74%); filter: blur(24px); }
 .hero-particle-c { filter: saturate(1.08); }
 
@@ -127,10 +136,39 @@ button { cursor: pointer; }
 .product-card:hover { border-color: rgba(32,232,120,.38); transform: translateY(-5px); box-shadow: 0 28px 70px rgba(0,0,0,.3); }
 .founder-card { box-shadow: 0 24px 70px rgba(0,0,0,.2); }
 .contact-cta {
-  position: relative; overflow: hidden; padding: clamp(4.5rem, 8vw, 7rem) var(--page-gutter);
+  position: relative; overflow: hidden; padding-block: clamp(4.5rem, 8vw, 7rem);
   background-color: #061019;
   background-image: linear-gradient(90deg, rgba(5,10,18,.98) 0%, rgba(5,10,18,.8) 48%, rgba(5,10,18,.16) 100%), url('/assets/codexa/homepage-products/background-cta-contato.png');
   background-size: cover; background-position: 68% center;
+}
+.contact-particle-target {
+  position: relative; z-index: 30; display: grid; width: clamp(12rem, 18vw, 16rem);
+  aspect-ratio: 1; flex: 0 0 auto; place-items: end center; border: 0;
+  border-radius: 50%; background: transparent; color: #6cffaa;
+}
+.contact-particle-target__hint {
+  display: inline-flex; min-height: 44px; align-items: center; gap: .5rem;
+  border-radius: 999px; border: 1px solid rgba(32,232,120,.3);
+  background: rgba(5,10,18,.72); padding: .65rem 1rem;
+  font-size: .75rem; font-weight: 700; white-space: nowrap;
+  opacity: .72; backdrop-filter: blur(12px);
+  transition: opacity .2s ease, border-color .2s ease, transform .2s var(--ease-out);
+}
+.contact-particle-target:hover .contact-particle-target__hint,
+.contact-particle-target:focus-visible .contact-particle-target__hint {
+  opacity: 1; border-color: rgba(32,232,120,.7); transform: translateY(-2px);
+}
+
+@media (min-width: 640px) {
+  :root { --page-gutter: 2rem; }
+}
+
+@media (min-width: 1024px) {
+  :root { --page-gutter: 3rem; }
+}
+
+@media (min-width: 1536px) {
+  :root { --page-gutter: 5rem; }
 }
 
 @media (max-width: 767px) {
@@ -147,6 +185,7 @@ button { cursor: pointer; }
     background-size: 9px 9px, 48px 48px, 48px 48px, 100% 100%;
   }
   .hero-particle-orb { top: 49%; right: -58%; width: 136vw; opacity: .38; }
+  .contact-particle-target { align-self: center; width: min(72vw, 15rem); }
   .button-primary, .button-secondary { width: 100%; }
 }
 

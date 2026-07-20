@@ -28,7 +28,7 @@ export function SiteHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[.07] bg-[#050a12]/82 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-5 sm:px-8 lg:px-12 2xl:px-20">
+      <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-[var(--page-gutter)]">
         <a href="#top" aria-label="Codexa — início" className="relative z-10 shrink-0">
           <Logo height={27} />
         </a>
@@ -59,8 +59,8 @@ export function SiteHeader() {
       </div>
 
       {menuOpen ? (
-        <nav id="mobile-menu" aria-label="Navegação mobile" className="border-t border-white/[.07] bg-[#071019] px-5 py-5 shadow-2xl lg:hidden">
-          <div className="mx-auto grid max-w-[1440px] gap-1">
+        <nav id="mobile-menu" aria-label="Navegação mobile" className="border-t border-white/[.07] bg-[#071019] py-5 shadow-2xl lg:hidden">
+          <div className="mx-auto grid max-w-[1440px] gap-1 px-[var(--page-gutter)]">
             {navigation.map(([label, href]) => (
               <a key={href} href={href} onClick={() => setMenuOpen(false)} className="flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-slate-200 hover:bg-white/[.05] hover:text-green">
                 {label}

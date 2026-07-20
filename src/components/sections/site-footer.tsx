@@ -7,7 +7,7 @@ const productLinks = [["Brainlink", "#produtos"], ["Vitrinefolio", "https://vitr
 export function SiteFooter() {
   return (
     <footer className="bg-[#050b14] text-white">
-      <div className="mx-auto grid max-w-[1200px] gap-10 px-5 py-14 sm:grid-cols-2 sm:px-8 lg:grid-cols-[1.45fr_0.8fr_0.9fr_1fr] lg:px-12 2xl:px-0">
+      <div className="mx-auto grid max-w-[1440px] gap-10 px-[var(--page-gutter)] py-14 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.9fr_1fr]">
         <div>
           <Logo height={32} />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-slate-400">Desenvolvemos produtos digitais simples, eficientes e escaláveis que impulsionam operações e impactam resultados.</p>
@@ -26,7 +26,7 @@ export function SiteFooter() {
           <a href="https://codexa-web.online" target="_blank" rel="noreferrer" className="mt-3 block text-sm text-slate-400 transition-colors hover:text-white">codexa-web.online</a>
         </div>
       </div>
-      <div className="border-t border-white/[0.07]"><p className="mx-auto max-w-[1200px] px-5 py-6 text-center text-xs text-slate-500 sm:px-8">© {new Date().getFullYear()} <span className="text-green">Codexa.</span> Todos os direitos reservados.</p></div>
+      <div className="border-t border-white/[0.07]"><p className="mx-auto max-w-[1440px] px-[var(--page-gutter)] py-6 text-center text-xs text-slate-500">© {new Date().getFullYear()} <span className="text-green">Codexa.</span> Todos os direitos reservados.</p></div>
     </footer>
   );
 }

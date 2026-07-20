@@ -9,7 +9,7 @@ export function Hero() {
   return (
     <section className="hero-section" aria-labelledby="hero-title">
       <HeroParticleOrb />
-      <div className="relative z-10 mx-auto flex w-full max-w-[1216px] items-center">
+      <div className="section-shell relative z-10 flex items-center">
         <div className="max-w-[700px]">
           <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[.045] px-3.5 py-2 text-xs font-semibold uppercase tracking-[.16em] text-green-strong">
             Produto · Software · Inteligência
