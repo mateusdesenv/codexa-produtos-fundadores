@@ -13,26 +13,25 @@ type CodexaParticle = {
   speed: number;
   side: -1 | 1;
   lane: number;
-  offsetX: number;
-  offsetY: number;
-  velocityX: number;
-  velocityY: number;
 };
 
 const START_ANGLE = Math.PI * 0.24;
 const ARC_LENGTH = Math.PI * 1.52;
 const POINTER_RADIUS = 108;
-const POINTER_FORCE = 1.35;
-const RETURN_FORCE = 0.055;
-const FRICTION = 0.86;
-const MAX_OFFSET = 26;
+const LOGO_ICON_PATH =
+  "/assets/codexa/homepage-products/brand/logo-icon-only.png";
 
 const clamp = (value: number, minimum = 0, maximum = 1) =>
   Math.min(maximum, Math.max(minimum, value));
 
 const easeInOut = (value: number) => {
   const progress = clamp(value);
-  return progress * progress * (3 - 2 * progress);
+  return (
+    progress *
+    progress *
+    progress *
+    (progress * (progress * 6 - 15) + 10)
+  );
 };
 
 const mix = (from: number, to: number, progress: number) =>
@@ -53,10 +52,68 @@ function createParticles(count: number): CodexaParticle[] {
       speed: 0.45 + Math.random() * 0.75,
       side: normalized < 0.5 ? -1 : 1,
       lane: Math.random(),
-      offsetX: 0,
-      offsetY: 0,
-      velocityX: 0,
-      velocityY: 0,
+    };
+  });
+}
+
+function createLogoParticles(image: HTMLImageElement, count: number): CodexaParticle[] {
+  const sampleSize = 256;
+  const sampleCanvas = document.createElement("canvas");
+  const sampleContext = sampleCanvas.getContext("2d", { willReadFrequently: true });
+  if (!sampleContext) return createParticles(count);
+
+  sampleCanvas.width = sampleSize;
+  sampleCanvas.height = sampleSize;
+  sampleContext.drawImage(image, 0, 0, sampleSize, sampleSize);
+
+  const imageData = sampleContext.getImageData(0, 0, sampleSize, sampleSize);
+  const logoPixels: Array<{ x: number; y: number }> = [];
+  let minimumX = sampleSize;
+  let maximumX = 0;
+  let minimumY = sampleSize;
+  let maximumY = 0;
+
+  for (let y = 0; y < sampleSize; y += 1) {
+    for (let x = 0; x < sampleSize; x += 1) {
+      const pixelIndex = (y * sampleSize + x) * 4;
+      const red = imageData.data[pixelIndex];
+      const green = imageData.data[pixelIndex + 1];
+      const blue = imageData.data[pixelIndex + 2];
+      const alpha = imageData.data[pixelIndex + 3];
+      const belongsToLogo =
+        alpha > 80 && green > 80 && green > red * 1.18 && green > blue * 1.18;
+
+      if (!belongsToLogo) continue;
+
+      logoPixels.push({ x, y });
+      minimumX = Math.min(minimumX, x);
+      maximumX = Math.max(maximumX, x);
+      minimumY = Math.min(minimumY, y);
+      maximumY = Math.max(maximumY, y);
+    }
+  }
+
+  if (logoPixels.length === 0) return createParticles(count);
+
+  const centerX = (minimumX + maximumX) * 0.5;
+  const centerY = (minimumY + maximumY) * 0.5;
+  const logoScale = Math.max(maximumX - minimumX, maximumY - minimumY) * 0.5;
+
+  return Array.from({ length: count }, () => {
+    const point = logoPixels[Math.floor(Math.random() * logoPixels.length)];
+    const normalizedX = (point.x - centerX) / logoScale;
+    const normalizedY = (point.y - centerY) / logoScale;
+
+    return {
+      angle: Math.atan2(normalizedY, normalizedX),
+      radius: Math.hypot(normalizedX, normalizedY),
+      depth: Math.random(),
+      size: 0.7 + Math.random() * 1.65,
+      alpha: 0.3 + Math.random() * 0.68,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.45 + Math.random() * 0.75,
+      side: normalizedX < 0 ? -1 : 1,
+      lane: Math.random(),
     };
   });
 }
@@ -78,12 +135,25 @@ export function HeroParticleOrb() {
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const compact = window.matchMedia("(max-width: 767px)").matches;
-    const particles = createParticles(reducedMotion ? 850 : compact ? 1300 : 2100);
+    const particleCount = reducedMotion ? 850 : compact ? 1300 : 2100;
+    const particles = createParticles(particleCount);
+    const logoImage = new Image();
+    let disposed = false;
     let frame = 0;
     let width = 0;
     let height = 0;
     let pixelRatio = 1;
     const pointer = { x: 0, y: 0, active: false };
+
+    logoImage.onload = () => {
+      if (disposed) return;
+      particles.splice(
+        0,
+        particles.length,
+        ...createLogoParticles(logoImage, particleCount),
+      );
+    };
+    logoImage.src = LOGO_ICON_PATH;
 
     const updatePointer = (event: PointerEvent) => {
       if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
@@ -119,7 +189,10 @@ export function HeroParticleOrb() {
         ? scrollY > 24
           ? 1
           : 0
-        : easeInOut(scrollY / Math.max(220, height * 0.32));
+        : easeInOut(
+            scrollY /
+              Math.max(compact ? 660 : 900, height * (compact ? 0.9 : 1.15)),
+          );
       const contactTarget = document.getElementById("contact-particle-target");
       const contactBounds = contactTarget?.getBoundingClientRect();
       const contactProgress = contactBounds
@@ -127,7 +200,7 @@ export function HeroParticleOrb() {
           ? contactBounds.top < height * 0.78
             ? 1
             : 0
-          : easeInOut((height * 0.92 - contactBounds.top) / (height * 0.42))
+          : easeInOut((height * 0.98 - contactBounds.top) / (height * 0.72))
         : 0;
       const contactCenterX = contactBounds
         ? contactBounds.left + contactBounds.width * 0.5
@@ -138,6 +211,22 @@ export function HeroParticleOrb() {
       const contactScale = contactBounds
         ? Math.min(contactBounds.width, contactBounds.height) * 0.38
         : 90;
+      const contentOccluders = Array.from(
+        document.querySelectorAll<HTMLElement>(
+          ".site-section > .section-shell, .contact-cta > .section-shell, footer > div:first-child",
+        ),
+        (element) => {
+          const bounds = element.getBoundingClientRect();
+          const styles = window.getComputedStyle(element);
+
+          return {
+            left: bounds.left + Number.parseFloat(styles.paddingLeft || "0"),
+            right: bounds.right - Number.parseFloat(styles.paddingRight || "0"),
+            top: bounds.top,
+            bottom: bounds.bottom,
+          };
+        },
+      ).filter(({ top, bottom }) => bottom > 0 && top < height);
       const breath = reducedMotion ? 1 : 1 + Math.sin(time * 0.75) * 0.012;
 
       context.globalCompositeOperation = "lighter";
@@ -156,64 +245,176 @@ export function HeroParticleOrb() {
 
         const sideInset = compact ? 8 : 16;
         const sideSpread = compact ? 22 : 52;
-        const sideX =
+        const baseSideX =
           particle.side < 0
             ? sideInset + particle.lane * sideSpread
             : width - sideInset - particle.lane * sideSpread;
-        const sideY =
+        const baseSideY =
           ((particle.phase / (Math.PI * 2)) * height +
             time * (8 + particle.speed * 9) +
             particle.lane * 80) %
           (height + 100) -
           50;
+        const lateralAnomalyWeight = reducedMotion
+          ? 0
+          : easeInOut(splitProgress) * (1 - easeInOut(contactProgress));
+        const anomalyPeriod = 5.2;
+        const anomalyCycle =
+          0.5 + Math.sin((time / anomalyPeriod) * Math.PI * 2) * 0.5;
+        const anomalyPulse = Math.pow(anomalyCycle, 4);
+        const anomalyCenterY =
+          height *
+          (0.5 +
+            Math.sin(time * 0.27 + (particle.side < 0 ? 0 : Math.PI)) * 0.24);
+        const anomalyDistanceY = baseSideY - anomalyCenterY;
+        const anomalyRange = Math.max(100, height * 0.18);
+        const anomalyInfluence = Math.exp(
+          -(anomalyDistanceY * anomalyDistanceY) /
+            (2 * anomalyRange * anomalyRange),
+        );
+        const anomalyDirection = particle.side < 0 ? 1 : -1;
+        const anomalyScale = compact ? 0.62 : 1;
+        const anomalyX =
+          (Math.sin(time * 1.08 + particle.phase * 1.7) *
+            (4 + particle.depth * 7) +
+            anomalyDirection *
+              anomalyPulse *
+              anomalyInfluence *
+              (22 + particle.depth * 22)) *
+          anomalyScale *
+          lateralAnomalyWeight;
+        const anomalyY =
+          (Math.cos(time * 0.82 + particle.phase * 1.35) *
+            (3 + particle.depth * 6) -
+            anomalyDistanceY *
+              anomalyInfluence *
+              anomalyPulse *
+              (0.08 + particle.depth * 0.07)) *
+          anomalyScale *
+          lateralAnomalyWeight;
+        const sideX = baseSideX + anomalyX;
+        const sideY = baseSideY + anomalyY;
 
         const contactRadius = contactScale * particle.radius + wave * 0.45;
-        const contactX = contactCenterX + Math.cos(angle) * contactRadius;
-        const contactY = contactCenterY + Math.sin(angle) * contactRadius * 1.02;
+        const contactFloatWeight = reducedMotion
+          ? 0
+          : easeInOut(contactProgress);
+        const contactFloatX =
+          Math.sin(time * 0.72 + particle.phase) *
+          (0.8 + particle.depth * 2.6) *
+          contactFloatWeight;
+        const contactFloatY =
+          Math.cos(time * 0.58 + particle.phase * 1.17) *
+          (1.2 + particle.depth * 3.4) *
+          contactFloatWeight;
+        const contactX =
+          contactCenterX + Math.cos(angle) * contactRadius + contactFloatX;
+        const contactY =
+          contactCenterY +
+          Math.sin(angle) * contactRadius * 1.02 +
+          contactFloatY;
 
-        const splitX = mix(heroX, sideX, splitProgress);
-        const splitY = mix(heroY, sideY, splitProgress);
-        const baseX = mix(splitX, contactX, contactProgress);
-        const baseY = mix(splitY, contactY, contactProgress);
+        const normalizedLogoX = clamp(
+          (Math.cos(particle.angle) * particle.radius + 1.05) / 2.1,
+        );
+        const waveDelay =
+          normalizedLogoX * 0.32 + particle.lane * 0.035;
+        const waveDuration = 1 - waveDelay;
+        const waveProgress = reducedMotion
+          ? splitProgress
+          : easeInOut(
+              clamp((splitProgress - waveDelay) / waveDuration),
+            );
+        const waveCompression = reducedMotion
+          ? 0
+          : Math.sin(waveProgress * Math.PI) *
+            (1 - Math.abs(waveProgress * 2 - 1)) *
+            (compact ? 14 : 24);
+        const contactWaveProgress = reducedMotion
+          ? contactProgress
+          : 1 -
+            easeInOut(
+              clamp(
+                ((1 - contactProgress) - waveDelay) / waveDuration,
+              ),
+            );
+        const contactWaveCompression = reducedMotion
+          ? 0
+          : Math.sin(contactWaveProgress * Math.PI) *
+            (1 - Math.abs(contactWaveProgress * 2 - 1)) *
+            (compact ? 14 : 24);
+        const splitX =
+          mix(heroX, sideX, waveProgress) -
+          particle.side * waveCompression;
+        const splitY =
+          mix(heroY, sideY, waveProgress) +
+          Math.sin(particle.phase + waveProgress * Math.PI * 2) *
+            waveCompression *
+            0.34;
+        const baseX =
+          mix(splitX, contactX, contactWaveProgress) -
+          particle.side * contactWaveCompression;
+        const baseY =
+          mix(splitY, contactY, contactWaveProgress) +
+          Math.sin(
+            particle.phase + contactWaveProgress * Math.PI * 2,
+          ) *
+            contactWaveCompression *
+            0.34;
+        const insideContactTarget =
+          contactBounds !== undefined &&
+          baseX >= contactBounds.left &&
+          baseX <= contactBounds.right &&
+          baseY >= contactBounds.top &&
+          baseY <= contactBounds.bottom;
+        const behindSectionContent =
+          !insideContactTarget &&
+          contentOccluders.some(
+            ({ left, right, top, bottom }) =>
+              baseX >= left &&
+              baseX <= right &&
+              baseY >= top &&
+              baseY <= bottom,
+          );
 
-        if (!reducedMotion && pointer.active && contactProgress < 0.92) {
-          const deltaX = baseX + particle.offsetX - pointer.x;
-          const deltaY = baseY + particle.offsetY - pointer.y;
+        if (behindSectionContent) continue;
+
+        let pointerGlow = 0;
+
+        if (!reducedMotion && pointer.active) {
+          const deltaX = baseX - pointer.x;
+          const deltaY = baseY - pointer.y;
           const distance = Math.hypot(deltaX, deltaY);
 
           if (distance < POINTER_RADIUS) {
-            const safeDistance = Math.max(distance, 0.1);
             const influence = 1 - distance / POINTER_RADIUS;
-            const force = influence * influence * POINTER_FORCE;
-            particle.velocityX += (deltaX / safeDistance) * force;
-            particle.velocityY += (deltaY / safeDistance) * force;
+            const ripple =
+              0.78 +
+              Math.sin(time * 6 - distance * 0.085 + particle.phase * 0.18) *
+                0.22;
+            pointerGlow = easeInOut(influence) * ripple;
           }
-        }
-
-        particle.velocityX += -particle.offsetX * RETURN_FORCE;
-        particle.velocityY += -particle.offsetY * RETURN_FORCE;
-        particle.velocityX *= FRICTION;
-        particle.velocityY *= FRICTION;
-        particle.offsetX += particle.velocityX;
-        particle.offsetY += particle.velocityY;
-
-        const offsetDistance = Math.hypot(particle.offsetX, particle.offsetY);
-        if (offsetDistance > MAX_OFFSET) {
-          const limit = MAX_OFFSET / offsetDistance;
-          particle.offsetX *= limit;
-          particle.offsetY *= limit;
         }
 
         const shimmer = reducedMotion
           ? 1
           : 0.78 + Math.sin(time * 1.15 + particle.phase) * 0.22;
+        const red = 52 + Math.round(particle.depth * 42 + pointerGlow * 86);
+        const green = 214 + Math.round(particle.depth * 41);
+        const blue = 112 + Math.round(particle.depth * 42 + pointerGlow * 62);
+        const glowAlpha = clamp(
+          particle.alpha *
+            shimmer *
+            (1 + pointerGlow * 0.55),
+        );
+        const glowSize = 1 + pointerGlow * 0.52;
 
         context.beginPath();
-        context.fillStyle = `rgba(${52 + Math.round(particle.depth * 42)}, ${214 + Math.round(particle.depth * 41)}, ${112 + Math.round(particle.depth * 42)}, ${particle.alpha * shimmer})`;
+        context.fillStyle = `rgba(${red}, ${green}, ${blue}, ${glowAlpha})`;
         context.arc(
-          baseX + particle.offsetX,
-          baseY + particle.offsetY,
-          particle.size * (0.82 + particle.depth * 0.32),
+          baseX,
+          baseY,
+          particle.size * (0.82 + particle.depth * 0.32) * glowSize,
           0,
           Math.PI * 2,
         );
@@ -232,6 +433,7 @@ export function HeroParticleOrb() {
     draw();
 
     return () => {
+      disposed = true;
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", updatePointer);
       window.removeEventListener("pointerout", resetPointer);
