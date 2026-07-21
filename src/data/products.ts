@@ -23,21 +23,21 @@ export type Product = {
 
 export const products: Product[] = [
   {
-    id: "brainlink",
-    name: "Brainlink",
-    category: "Memória & Contexto para IA",
-    tagline: "A memória que seus agentes de IA nunca esquecem.",
+    id: "aqui-comanda",
+    name: "Aqui Comanda",
+    category: "Gestão para Estabelecimentos",
+    tagline: "Seu atendimento organizado, do pedido ao caixa.",
     description:
-      "Memória persistente e busca de contexto para equipes e agentes de IA. Recuperação híbrida (RAG + CAG), grafo de conhecimento e um vault cifrado que mantém decisões, padrões e credenciais sempre à mão — entre sessões e entre ferramentas.",
+      "Sistema de gestão para bares, restaurantes, lanchonetes e outros estabelecimentos. Centralize comandas, mesas, pedidos, estoque e caixa em uma operação simples, rápida e conectada.",
     highlights: [
-      "Busca híbrida (semântica + full-text)",
-      "Grafo de conhecimento conectado",
-      "Vault cifrado em repouso",
+      "Comandas, mesas e pedidos integrados",
+      "Estoque e caixa em tempo real",
+      "Gestão multiunidade e multiusuário",
     ],
     url: "",
-    image: "/products/brainlink.jpg",
-    thumb: "/products/brainlink-thumb.jpg",
-    background: "/assets/codexa/homepage-products/cards/card-bg-brainlink.png",
+    image: "/products/aqui-comanda.svg",
+    thumb: "/products/aqui-comanda.svg",
+    background: "/assets/codexa/homepage-products/cards/card-bg-aqui-comanda.svg",
     comingSoon: true,
   },
   {

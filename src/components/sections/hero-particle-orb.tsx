@@ -184,7 +184,7 @@ export function HeroParticleOrb() {
       const anchorDocumentTop = anchorBounds.top + scrollY;
       const heroCenterX = anchorBounds.left + anchorBounds.width * 0.5;
       const heroCenterY = anchorDocumentTop - scrollY + anchorBounds.height * 0.5;
-      const heroScale = Math.min(anchorBounds.width, anchorBounds.height) * 0.39;
+      const heroScale = Math.min(anchorBounds.width, anchorBounds.height) * 0.33;
       const splitProgress = reducedMotion
         ? scrollY > 24
           ? 1
@@ -211,22 +211,6 @@ export function HeroParticleOrb() {
       const contactScale = contactBounds
         ? Math.min(contactBounds.width, contactBounds.height) * 0.38
         : 90;
-      const contentOccluders = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          ".site-section > .section-shell, .contact-cta > .section-shell, footer > div:first-child",
-        ),
-        (element) => {
-          const bounds = element.getBoundingClientRect();
-          const styles = window.getComputedStyle(element);
-
-          return {
-            left: bounds.left + Number.parseFloat(styles.paddingLeft || "0"),
-            right: bounds.right - Number.parseFloat(styles.paddingRight || "0"),
-            top: bounds.top,
-            bottom: bounds.bottom,
-          };
-        },
-      ).filter(({ top, bottom }) => bottom > 0 && top < height);
       const breath = reducedMotion ? 1 : 1 + Math.sin(time * 0.75) * 0.012;
 
       context.globalCompositeOperation = "lighter";
@@ -361,24 +345,6 @@ export function HeroParticleOrb() {
           ) *
             contactWaveCompression *
             0.34;
-        const insideContactTarget =
-          contactBounds !== undefined &&
-          baseX >= contactBounds.left &&
-          baseX <= contactBounds.right &&
-          baseY >= contactBounds.top &&
-          baseY <= contactBounds.bottom;
-        const behindSectionContent =
-          !insideContactTarget &&
-          contentOccluders.some(
-            ({ left, right, top, bottom }) =>
-              baseX >= left &&
-              baseX <= right &&
-              baseY >= top &&
-              baseY <= bottom,
-          );
-
-        if (behindSectionContent) continue;
-
         let pointerGlow = 0;
 
         if (!reducedMotion && pointer.active) {

@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { ArrowUpRight, Bot, BrainCircuit, Church, FileText, LayoutTemplate } from "lucide-react";
+import { ArrowUpRight, Bot, Church, ClipboardList, FileText, LayoutTemplate } from "lucide-react";
 import { products } from "@/data/products";
 
 const icons = {
-  brainlink: BrainCircuit,
+  "aqui-comanda": ClipboardList,
   vitrinefolio: LayoutTemplate,
   minutaai: FileText,
   "gestao-paroquial": Church,

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   keywords: [
     "Codexa",
     "software",
-    "Brainlink",
+    "Aqui Comanda",
     "Vitrinefolio",
     "Gestão Paroquial",
     "MinutaAI",
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     siteName: "Codexa",
     title: "Codexa — Produtos que geram resultado real",
     description:
-      "Uma constelação de produtos de software da Codexa: memória para IA, portfólios, gestão e automação jurídica.",
+      "Uma constelação de produtos de software da Codexa para operações, portfólios, gestão e automação jurídica.",
   },
   robots: { index: true, follow: true },
 };
