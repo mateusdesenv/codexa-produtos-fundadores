@@ -34,6 +34,63 @@ const smootherstep = (value: number) => {
 const mix = (from: number, to: number, progress: number) =>
   from + (to - from) * progress;
 
+function roundedRectanglePoint(
+  progress: number,
+  halfWidth: number,
+  halfHeight: number,
+  radius: number,
+) {
+  const cornerRadius = Math.min(radius, halfWidth, halfHeight);
+  const horizontalLength = Math.max(0, halfWidth - cornerRadius) * 2;
+  const verticalLength = Math.max(0, halfHeight - cornerRadius) * 2;
+  const arcLength = Math.PI * cornerRadius * 0.5;
+  const perimeter = horizontalLength * 2 + verticalLength * 2 + arcLength * 4;
+  let distance = ((progress % 1) + 1) % 1 * perimeter;
+
+  const line = (length: number, startX: number, startY: number, endX: number, endY: number) => {
+    const ratio = length === 0 ? 0 : distance / length;
+    return {
+      x: mix(startX, endX, ratio),
+      y: mix(startY, endY, ratio),
+      normalX: startY === endY ? 0 : startX > 0 ? 1 : -1,
+      normalY: startX === endX ? 0 : startY > 0 ? 1 : -1,
+    };
+  };
+  const arc = (startAngle: number, centerX: number, centerY: number) => {
+    const angle = startAngle + (distance / arcLength) * Math.PI * 0.5;
+    return {
+      x: centerX + Math.cos(angle) * cornerRadius,
+      y: centerY + Math.sin(angle) * cornerRadius,
+      normalX: Math.cos(angle),
+      normalY: Math.sin(angle),
+    };
+  };
+
+  if (distance <= horizontalLength) {
+    return line(horizontalLength, -halfWidth + cornerRadius, -halfHeight, halfWidth - cornerRadius, -halfHeight);
+  }
+  distance -= horizontalLength;
+  if (distance <= arcLength) return arc(-Math.PI * 0.5, halfWidth - cornerRadius, -halfHeight + cornerRadius);
+  distance -= arcLength;
+  if (distance <= verticalLength) {
+    return line(verticalLength, halfWidth, -halfHeight + cornerRadius, halfWidth, halfHeight - cornerRadius);
+  }
+  distance -= verticalLength;
+  if (distance <= arcLength) return arc(0, halfWidth - cornerRadius, halfHeight - cornerRadius);
+  distance -= arcLength;
+  if (distance <= horizontalLength) {
+    return line(horizontalLength, halfWidth - cornerRadius, halfHeight, -halfWidth + cornerRadius, halfHeight);
+  }
+  distance -= horizontalLength;
+  if (distance <= arcLength) return arc(Math.PI * 0.5, -halfWidth + cornerRadius, halfHeight - cornerRadius);
+  distance -= arcLength;
+  if (distance <= verticalLength) {
+    return line(verticalLength, -halfWidth, halfHeight - cornerRadius, -halfWidth, -halfHeight + cornerRadius);
+  }
+  distance -= verticalLength;
+  return arc(Math.PI, -halfWidth + cornerRadius, -halfHeight + cornerRadius);
+}
+
 function fallbackParticles(count: number): GalaxyParticle[] {
   return Array.from({ length: count }, (_, index) => {
     const normalized = (index + Math.random() * 0.8) / count;
@@ -162,16 +219,6 @@ export function HeroParticleOrb() {
           : smootherstep((height * 0.94 - contactBounds.top) / (height * 0.48))
         : 0;
 
-      const footerBounds = document.getElementById("footer-particle-target")?.getBoundingClientRect();
-      const footerProgress = footerBounds
-        ? reducedMotion
-          ? footerBounds.top < height * 0.82 ? 1 : 0
-          : smootherstep((height * 0.82 - footerBounds.top) / (height * 0.42))
-        : 0;
-      const footerCenterX = footerBounds ? footerBounds.left + footerBounds.width * 0.5 : width * 0.18;
-      const footerCenterY = footerBounds ? footerBounds.top + footerBounds.height * 0.5 : height * 0.7;
-      const footerScale = compact ? 47 : 60;
-
       const productBounds = Array.from(
         document.querySelectorAll<HTMLElement>("[data-particle-attractor]"),
         (element) => element.getBoundingClientRect(),
@@ -190,7 +237,9 @@ export function HeroParticleOrb() {
           bounds.bottom > -32 &&
           bounds.top < height + 32,
       );
-      const travelVisibility = smootherstep(travelProgress) * (1 - smootherstep(footerProgress));
+      const travelVisibility =
+        smootherstep(travelProgress) *
+        (1 - smootherstep(contactProgress));
       const vanishingX = width * 0.5;
       const vanishingY = height * 0.47;
 
@@ -251,61 +300,67 @@ export function HeroParticleOrb() {
 
         const contactCenterX = contactBounds ? contactBounds.left + contactBounds.width * 0.5 : width * 0.78;
         const contactCenterY = contactBounds ? contactBounds.top + contactBounds.height * 0.5 : height * 0.62;
-        const halfContactWidth = contactBounds ? contactBounds.width * 0.5 : 112;
-        const halfContactHeight = contactBounds ? contactBounds.height * 0.5 : 28;
-        const borderAngle = particle.phase;
-        const borderCosine = Math.cos(borderAngle);
-        const borderSine = Math.sin(borderAngle);
-        const borderFloat = reducedMotion ? 0 : Math.sin(time * 1.4 + particle.phase * 1.7) * (0.35 + particle.depth * 0.8);
+        const halfContactWidth = contactBounds ? contactBounds.width * 0.5 : compact ? 144 : 216;
+        const halfContactHeight = contactBounds ? contactBounds.height * 0.5 : compact ? 44 : 56;
+        const cornerRadius = Math.min(compact ? 25 : 31, halfContactHeight * 0.58);
+        const borderProgress = particle.phase / TAU;
+        const borderPoint = roundedRectanglePoint(borderProgress, halfContactWidth, halfContactHeight, cornerRadius);
+        const isCornerNode = index % 10 === 0;
+        const cornerIndex = Math.floor(index / 10) % 4;
+        const cornerCenters = [
+          { x: -halfContactWidth + cornerRadius, y: -halfContactHeight + cornerRadius },
+          { x: halfContactWidth - cornerRadius, y: -halfContactHeight + cornerRadius },
+          { x: halfContactWidth - cornerRadius, y: halfContactHeight - cornerRadius },
+          { x: -halfContactWidth + cornerRadius, y: halfContactHeight - cornerRadius },
+        ];
+        const cornerAngles = [-Math.PI * 0.75, -Math.PI * 0.25, Math.PI * 0.25, Math.PI * 0.75];
+        const cornerCenter = cornerCenters[cornerIndex];
+        const cornerAngle = cornerAngles[cornerIndex] + Math.sin(particle.phase * 2.7) * 0.46;
+        const cornerSpread = cornerRadius + (particle.depth - 0.5) * 8;
+        const borderThickness = (particle.depth - 0.5) * (compact ? 4.5 : 6.5);
+        const finalBorderX = isCornerNode
+          ? cornerCenter.x + Math.cos(cornerAngle) * cornerSpread
+          : borderPoint.x + borderPoint.normalX * borderThickness;
+        const finalBorderY = isCornerNode
+          ? cornerCenter.y + Math.sin(cornerAngle) * cornerSpread
+          : borderPoint.y + borderPoint.normalY * borderThickness;
+        const borderFloat = reducedMotion ? 0 : Math.sin(time * 1.55 + particle.phase * 1.7) * (0.55 + particle.depth * 1.05);
         const contactBorderX =
           contactCenterX +
-          borderCosine * halfContactWidth +
-          borderFloat;
+          finalBorderX +
+          borderPoint.normalX * borderFloat;
         const contactBorderY =
           contactCenterY +
-          borderSine * halfContactHeight +
-          borderFloat * 0.35;
+          finalBorderY +
+          borderPoint.normalY * borderFloat;
         const contactParticleProgress = reducedMotion
           ? contactProgress
           : smootherstep(clamp((contactProgress - delay * 0.22) / (1 - delay * 0.22)));
-        const contactMembership = index % (compact ? 3 : 4) === 0 ? 1 : 0;
-        const effectiveContactProgress = contactParticleProgress * contactMembership;
-        const contactX = mix(travellingX, contactBorderX, effectiveContactProgress);
-        const contactY = mix(travellingY, contactBorderY, effectiveContactProgress);
-
-        const normalizedRadius = clamp(particle.radius, 0, 1);
-        const celestialDepth = Math.sqrt(Math.max(0, 1 - normalizedRadius * normalizedRadius));
-        const perspective = 0.9 + celestialDepth * 0.17;
-        const celestialX = footerCenterX + Math.cos(logoAngle) * footerScale * particle.radius * perspective;
-        const celestialY = footerCenterY + Math.sin(logoAngle) * footerScale * particle.radius * 1.02;
-        const footerParticleProgress = reducedMotion
-          ? footerProgress
-          : smootherstep(clamp((footerProgress - delay * 0.4) / (1 - delay * 0.4)));
-        const condensation = reducedMotion ? 0 : Math.sin(footerParticleProgress * Math.PI) * (compact ? 18 : 31);
-        const baseX = mix(contactX, celestialX, footerParticleProgress) - Math.cos(particle.phase) * condensation;
-        const baseY = mix(contactY, celestialY, footerParticleProgress) - Math.sin(particle.phase) * condensation;
+        const streamSide = particle.lane < 0.5 ? -1 : 1;
+        const streamOriginX = contactCenterX + streamSide * (halfContactWidth + (compact ? 54 : 112));
+        const streamOriginY = contactCenterY + Math.sin(particle.phase * 1.8) * halfContactHeight * 0.56;
+        const streamPull = Math.sin(contactParticleProgress * Math.PI);
+        const magneticX = mix(travellingX, streamOriginX, streamPull * 0.82);
+        const magneticY = mix(travellingY, streamOriginY, streamPull * 0.82);
+        const baseX = mix(magneticX, contactBorderX, contactParticleProgress);
+        const baseY = mix(magneticY, contactBorderY, contactParticleProgress);
         positions[index * 2] = baseX;
         positions[index * 2 + 1] = baseY;
 
         const color = GALAXY_PALETTE[Math.floor((particle.depth * 0.74 + particle.lane * 0.26) * GALAXY_PALETTE.length) % GALAXY_PALETTE.length];
         const twinkle = reducedMotion ? 1 : 0.7 + Math.sin(time * (1.1 + particle.speed) + particle.phase) * 0.3;
         const depthBrightness = 0.35 + depthCycle * 0.65;
-        const celestialLight = 0.58 + celestialDepth * 0.72;
-        const footerIntensity = smootherstep(footerProgress);
-        const contactIntensity =
-          smootherstep(contactProgress) *
-          (1 - footerIntensity) *
-          contactMembership;
+        const contactIntensity = smootherstep(contactProgress);
         const alpha = clamp(
           particle.alpha *
             twinkle *
-            mix(depthBrightness, celestialLight, footerIntensity) *
-            mix(1, 0.82, contactIntensity),
+            depthBrightness *
+            mix(1, isCornerNode ? 0.86 : 0.52, contactIntensity),
         );
         const size =
           particle.size *
-          mix(0.52 + depthCycle * 1.24, 0.9 + celestialDepth * 0.82, footerIntensity) *
-          mix(1, 0.65, contactIntensity);
+          (0.52 + depthCycle * 1.24) *
+          mix(1, isCornerNode ? 0.68 : 0.46, contactIntensity);
 
         if (travelVisibility > 0.08 && depthCycle > 0.68 && clusterId < 0 && !reducedMotion) {
           const streak = (depthCycle - 0.68) * (compact ? 22 : 38);

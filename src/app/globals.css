@@ -142,33 +142,24 @@ button { cursor: pointer; }
   background-size: cover; background-position: 68% center;
 }
 .contact-particle-target {
-  position: relative; z-index: 30; display: grid; width: clamp(13rem, 18vw, 15rem);
-  min-height: 3.5rem; flex: 0 0 auto; place-items: center; border: 0;
-  border-radius: 999px; background: transparent; color: #6cffaa;
+  position: relative; z-index: 30; display: grid; width: clamp(20rem, 30vw, 27rem);
+  min-height: clamp(6rem, 8vw, 7rem); flex: 0 0 auto; place-items: center; border: 0;
+  border-radius: 2rem; background: transparent; color: #b8ffd3;
+  filter: drop-shadow(0 0 20px rgba(32,232,120,.08));
 }
 .contact-particle-target__hint {
   display: inline-flex; min-height: 44px; align-items: center; gap: .5rem;
-  border: 0; background: transparent; padding: .65rem 1rem;
-  font-size: .75rem; font-weight: 700; white-space: nowrap;
-  opacity: .9;
-  transition: opacity .2s ease, color .2s ease, transform .2s var(--ease-out);
+  border: 0; background: transparent; padding: .8rem 1.25rem;
+  font-size: clamp(.875rem, 1.1vw, 1rem); font-weight: 720; letter-spacing: -.01em; white-space: nowrap;
+  opacity: .96;
+  text-shadow: 0 0 22px rgba(108,255,170,.24);
+  transition: opacity .2s ease, color .2s ease, transform .2s var(--ease-out), text-shadow .2s ease;
 }
 .contact-particle-target:hover .contact-particle-target__hint,
 .contact-particle-target:focus-visible .contact-particle-target__hint {
-  opacity: 1; color: #b8ffd3; transform: translateY(-1px);
+  opacity: 1; color: #e2ffed; transform: translateY(-1px); text-shadow: 0 0 28px rgba(108,255,170,.48);
 }
 .contact-particle-target:focus-visible { outline: 2px solid #6cffaa; outline-offset: 5px; }
-.footer-particle-target {
-  position: relative; display: inline-flex; min-width: 10rem; min-height: 4.5rem;
-  align-items: center; isolation: isolate;
-}
-.footer-particle-target::before {
-  content: ""; position: absolute; z-index: -1; inset: -2.5rem -3rem;
-  border-radius: 50%; pointer-events: none;
-  background: radial-gradient(circle, rgba(32,232,120,.11), transparent 67%);
-  filter: blur(18px);
-}
-
 @media (min-width: 640px) {
   :root { --page-gutter: 2rem; }
 }
@@ -195,7 +186,10 @@ button { cursor: pointer; }
     background-size: 9px 9px, 48px 48px, 48px 48px, 100% 100%;
   }
   .hero-particle-orb { top: 49%; right: -58%; width: 136vw; opacity: .38; }
-  .contact-particle-target { align-self: center; width: min(72vw, 15rem); }
+  .contact-particle-target {
+    align-self: stretch; width: min(100%, 22rem); min-height: 5.5rem;
+    border-radius: 1.6rem;
+  }
   .button-primary, .button-secondary { width: 100%; }
 }
 
