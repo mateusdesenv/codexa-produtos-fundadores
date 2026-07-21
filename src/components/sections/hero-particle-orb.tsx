@@ -325,17 +325,33 @@ export function HeroParticleOrb() {
           ? cornerCenter.y + Math.sin(cornerAngle) * cornerSpread
           : borderPoint.y + borderPoint.normalY * borderThickness;
         const borderFloat = reducedMotion ? 0 : Math.sin(time * 1.55 + particle.phase * 1.7) * (0.55 + particle.depth * 1.05);
-        const contactBorderX =
-          contactCenterX +
-          finalBorderX +
-          borderPoint.normalX * borderFloat;
-        const contactBorderY =
-          contactCenterY +
-          finalBorderY +
-          borderPoint.normalY * borderFloat;
         const contactParticleProgress = reducedMotion
           ? contactProgress
           : smootherstep(clamp((contactProgress - delay * 0.22) / (1 - delay * 0.22)));
+        const floatingWeight = smootherstep(contactParticleProgress);
+        const floatingAmplitude = (compact ? 1.7 : 2.5) * (0.55 + particle.depth * 0.85) * (isCornerNode ? 0.62 : 1);
+        const floatingX = reducedMotion
+          ? 0
+          : (
+              Math.sin(time * (0.62 + particle.speed * 0.08) + particle.phase * 1.9) * 0.64 +
+              Math.cos(time * 0.37 + particle.phase * 3.2) * 0.36
+            ) * floatingAmplitude * floatingWeight;
+        const floatingY = reducedMotion
+          ? 0
+          : (
+              Math.cos(time * (0.54 + particle.speed * 0.07) + particle.phase * 1.45) * 0.68 +
+              Math.sin(time * 0.31 + particle.phase * 2.65) * 0.32
+            ) * floatingAmplitude * 1.18 * floatingWeight;
+        const contactBorderX =
+          contactCenterX +
+          finalBorderX +
+          borderPoint.normalX * borderFloat +
+          floatingX;
+        const contactBorderY =
+          contactCenterY +
+          finalBorderY +
+          borderPoint.normalY * borderFloat +
+          floatingY;
         const streamSide = particle.lane < 0.5 ? -1 : 1;
         const streamOriginX = contactCenterX + streamSide * (halfContactWidth + (compact ? 54 : 112));
         const streamOriginY = contactCenterY + Math.sin(particle.phase * 1.8) * halfContactHeight * 0.56;
