@@ -2,7 +2,7 @@ import { Github, Instagram, Linkedin } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 
 const navigation = [["Produtos", "#produtos"], ["Fundadores", "#fundadores"], ["Como construímos", "#depoimentos"], ["Portfólio", "#portfolio"], ["Contato", "#contato"]];
-const productLinks = [["Brainlink", "#produtos"], ["Vitrinefolio", "https://vitrinefolio.vercel.app"], ["Minuta AI", "https://minutaai.com"], ["Gestão Paroquial", "https://gestaoparoquial.com"], ["Iris", "#produtos"]];
+const productLinks = [["Aqui Comanda", "#produtos"], ["Vitrinefolio", "https://vitrinefolio.vercel.app"], ["Minuta AI", "https://minutaai.com"], ["Gestão Paroquial", "https://gestaoparoquial.com"], ["Iris", "#produtos"]];
 
 export function SiteFooter() {
   return (

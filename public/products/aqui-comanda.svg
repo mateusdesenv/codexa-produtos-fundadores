@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 450" role="img" aria-label="Aqui Comanda">
+  <rect width="720" height="450" fill="#172920"/>
+  <circle cx="608" cy="64" r="180" fill="#c37c22" fill-opacity=".25"/>
+  <rect x="86" y="72" width="548" height="306" rx="26" fill="#f7f2ec"/>
+  <rect x="86" y="72" width="124" height="306" rx="26" fill="#1b3227"/>
+  <rect x="116" y="105" width="52" height="52" rx="15" fill="#c37c22"/>
+  <path d="M132 121h21v6h-15v7h13v6h-13v9h-6z" fill="#fff"/>
+  <text x="246" y="126" fill="#172920" font-family="Arial, sans-serif" font-size="25" font-weight="700">Aqui Comanda</text>
+  <text x="246" y="153" fill="#737873" font-family="Arial, sans-serif" font-size="12">Mapa de comandas</text>
+  <g fill="#fff" stroke="#ddd9d1">
+    <rect x="246" y="184" width="105" height="72" rx="14"/><rect x="367" y="184" width="105" height="72" rx="14"/><rect x="488" y="184" width="105" height="72" rx="14"/>
+    <rect x="246" y="274" width="105" height="72" rx="14"/><rect x="367" y="274" width="105" height="72" rx="14"/><rect x="488" y="274" width="105" height="72" rx="14"/>
+  </g>
+  <g fill="#172920" font-family="Arial, sans-serif" font-size="11" font-weight="700">
+    <text x="264" y="214">COMANDA 01</text><text x="385" y="214">COMANDA 02</text><text x="506" y="214">COMANDA 03</text>
+    <text x="264" y="304">COMANDA 04</text><text x="385" y="304">COMANDA 05</text><text x="506" y="304">COMANDA 06</text>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="9" font-weight="700">
+    <text x="264" y="239" fill="#38815b">LIVRE</text><text x="385" y="239" fill="#c37c22">OCUPADA</text><text x="506" y="239" fill="#38815b">LIVRE</text>
+    <text x="264" y="329" fill="#c37c22">OCUPADA</text><text x="385" y="329" fill="#38815b">LIVRE</text><text x="506" y="329" fill="#38815b">LIVRE</text>
+  </g>
+</svg>

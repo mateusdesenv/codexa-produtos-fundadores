@@ -3,7 +3,7 @@
 import Image from "next/image";
 import {
   ArrowRight,
-  BrainCircuit,
+  ClipboardList,
   Code2,
   Layers3,
   ShieldCheck,
@@ -47,7 +47,7 @@ const principles = [
 ];
 
 const portfolio = [
-  { Icon: BrainCircuit, name: "Brainlink", text: "Memória e contexto para agentes de IA." },
+  { Icon: ClipboardList, name: "Aqui Comanda", text: "Gestão integrada para estabelecimentos." },
   { Icon: Layers3, name: "Vitrinefolio", text: "Portfólios profissionais que vendem o trabalho." },
   { Icon: Code2, name: "Minuta AI", text: "Automação inteligente de documentos jurídicos." },
   { Icon: ShieldCheck, name: "Gestão Paroquial", text: "Operação financeira centralizada para paróquias." },

@@ -110,7 +110,7 @@ button { cursor: pointer; }
   pointer-events: none; overflow: visible;
 }
 .hero-particle-orb__canvas {
-  position: fixed; inset: 0; z-index: 20; display: block;
+  position: fixed; inset: 0; z-index: 9999; display: block;
   width: 100vw; height: 100dvh; pointer-events: none;
   filter: drop-shadow(0 0 24px rgba(32,232,120,.2));
 }
