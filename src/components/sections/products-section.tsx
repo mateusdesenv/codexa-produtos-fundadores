@@ -57,9 +57,9 @@ export function ProductsSection() {
             );
 
             return product.comingSoon ? (
-              <article key={product.id} className="product-card surface-card group relative overflow-hidden rounded-[1.5rem]">{content}</article>
+              <article key={product.id} data-particle-attractor className="product-card surface-card group relative overflow-hidden rounded-[1.5rem]">{content}</article>
             ) : (
-              <a key={product.id} href={product.url} target="_blank" rel="noreferrer" aria-label={`Conhecer ${product.name} (abre em nova aba)`} className="product-card surface-card group relative overflow-hidden rounded-[1.5rem]">{content}</a>
+              <a key={product.id} data-particle-attractor href={product.url} target="_blank" rel="noreferrer" aria-label={`Conhecer ${product.name} (abre em nova aba)`} className="product-card surface-card group relative overflow-hidden rounded-[1.5rem]">{content}</a>
             );
           })}
         </div>

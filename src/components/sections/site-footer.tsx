@@ -9,7 +9,9 @@ export function SiteFooter() {
     <footer className="bg-[#050b14] text-white">
       <div className="mx-auto grid max-w-[1440px] gap-10 px-[var(--page-gutter)] py-14 sm:grid-cols-2 lg:grid-cols-[1.45fr_0.8fr_0.9fr_1fr]">
         <div>
-          <Logo height={32} />
+          <div id="footer-particle-target" className="footer-particle-target">
+            <Logo height={32} />
+          </div>
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-slate-400">Desenvolvemos produtos digitais simples, eficientes e escaláveis que impulsionam operações e impactam resultados.</p>
           <div className="mt-5 flex gap-2">
             {[["LinkedIn", "https://www.linkedin.com/company/codexa-web/", Linkedin], ["Instagram", "https://www.instagram.com/co.dexaweb", Instagram], ["GitHub", "https://github.com/andersonflima", Github]].map(([label, href, Icon]) => {

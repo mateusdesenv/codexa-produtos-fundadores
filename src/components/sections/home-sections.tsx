@@ -121,7 +121,7 @@ export function PrinciplesSection() {
         </header>
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {principles.map(({ Icon, title, text }, index) => (
-            <article key={title} className="surface-card rounded-[1.5rem] p-7 sm:p-8">
+            <article key={title} data-galaxy-orbit className="surface-card rounded-[1.5rem] p-7 sm:p-8">
               <div className="flex items-center justify-between">
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-green/10 text-green"><Icon className="h-5 w-5" aria-hidden="true" /></span>
                 <span className="text-xs font-medium text-white/30">0{index + 1}</span>
@@ -146,7 +146,7 @@ export function PortfolioSection() {
         </header>
         <div className="mt-12 grid gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {portfolio.map(({ Icon, name, text }) => (
-            <article key={name} className="bg-[#0a141c] p-7 transition-colors hover:bg-[#0d1922]">
+            <article key={name} data-particle-occluder className="bg-[#0a141c] p-7 transition-colors hover:bg-[#0d1922]">
               <Icon className="h-6 w-6 text-green" aria-hidden="true" />
               <h3 className="mt-7 font-semibold text-white">{name}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
