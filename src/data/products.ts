@@ -37,7 +37,7 @@ export const products: Product[] = [
     url: "",
     image: "/products/aqui-comanda.svg",
     thumb: "/products/aqui-comanda.svg",
-    background: "/assets/codexa/homepage-products/cards/card-bg-aqui-comanda.svg",
+    background: "/assets/codexa/homepage-products/cards/card-bg-aqui-comanda.png",
     comingSoon: true,
   },
   {
