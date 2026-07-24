@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowUpRight, Search } from "lucide-react";
+import { ArrowUpRight, Layers3, Search, X } from "lucide-react";
 import {
   getPortfolioAssetUrl,
   type PortfolioItem,
@@ -43,39 +43,87 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
     });
   }, [category, items, query]);
 
+  const hasActiveFilters = Boolean(query.trim()) || category !== "Todos";
+
+  const clearFilters = () => {
+    setQuery("");
+    setCategory("Todos");
+  };
+
   return (
-    <>
+    <div className="portfolio-gallery">
+      <div className="portfolio-gallery__intro">
+        <div>
+          <p className="section-eyebrow">Projetos cadastrados</p>
+          <h2>Explore o que já construímos.</h2>
+        </div>
+        <div className="portfolio-gallery__total" aria-label={`${items.length} projetos no portfólio`}>
+          <Layers3 aria-hidden="true" />
+          <span>
+            <strong>{String(items.length).padStart(2, "0")}</strong>
+            projetos
+          </span>
+        </div>
+      </div>
+
       <div className="portfolio-toolbar">
         <label className="portfolio-search">
-          <Search className="h-4 w-4" aria-hidden="true" />
+          <Search aria-hidden="true" />
           <span className="sr-only">Buscar projeto</span>
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por projeto, categoria ou tecnologia"
+            placeholder="Buscar projeto ou tecnologia"
           />
+          {query ? (
+            <button
+              type="button"
+              className="portfolio-search__clear"
+              onClick={() => setQuery("")}
+              aria-label="Limpar busca"
+            >
+              <X aria-hidden="true" />
+            </button>
+          ) : null}
         </label>
 
         <div className="portfolio-filters" aria-label="Filtrar por categoria">
-          {categories.map((option) => (
-            <button
-              key={option}
-              type="button"
-              aria-pressed={category === option}
-              onClick={() => setCategory(option)}
-              className="portfolio-filter"
-            >
-              {option}
-            </button>
-          ))}
+          {categories.map((option) => {
+            const optionCount =
+              option === "Todos"
+                ? items.length
+                : items.filter((item) => item.category === option).length;
+
+            return (
+              <button
+                key={option}
+                type="button"
+                aria-pressed={category === option}
+                onClick={() => setCategory(option)}
+                className="portfolio-filter"
+              >
+                <span>{option}</span>
+                <small>{optionCount}</small>
+              </button>
+            );
+          })}
         </div>
       </div>
 
-      <p className="mt-6 text-sm text-slate-500" aria-live="polite">
-        {visibleItems.length}{" "}
-        {visibleItems.length === 1 ? "projeto encontrado" : "projetos encontrados"}
-      </p>
+      <div className="portfolio-results">
+        <p aria-live="polite">
+          <strong>{String(visibleItems.length).padStart(2, "0")}</strong>{" "}
+          {visibleItems.length === 1 ? "projeto encontrado" : "projetos encontrados"}
+          {category !== "Todos" ? <span> em {category}</span> : null}
+        </p>
+        {hasActiveFilters ? (
+          <button type="button" onClick={clearFilters}>
+            Limpar filtros
+            <X aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
 
       {visibleItems.length ? (
         <div className="portfolio-grid">
@@ -125,6 +173,12 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
                       ))}
                     </ul>
                   ) : null}
+                  {projectUrl ? (
+                    <span className="portfolio-card__cta">
+                      {item.primaryCtaLabel || "Ver projeto"}
+                      <ArrowUpRight aria-hidden="true" />
+                    </span>
+                  ) : null}
                 </div>
               </>
             );
@@ -152,8 +206,11 @@ export function PortfolioGallery({ items }: { items: PortfolioItem[] }) {
           <Search className="h-6 w-6 text-green" aria-hidden="true" />
           <h2>Nenhum projeto por aqui.</h2>
           <p>Tente outro termo ou selecione uma categoria diferente.</p>
+          <button type="button" className="portfolio-empty__reset" onClick={clearFilters}>
+            Ver todos os projetos
+          </button>
         </div>
       )}
-    </>
+    </div>
   );
 }
