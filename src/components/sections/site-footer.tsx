@@ -22,7 +22,7 @@ export function SiteFooter() {
         <FooterLinks title="Navegação" links={navigation} />
         <FooterLinks title="Produtos" links={productLinks} />
         <div>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">Contato</h2>
+          <h2 className="text-xs font-black uppercase tracking-[0.18em] text-slate-300">Contato</h2>
           <Link href="/#contato" className="mt-5 block text-sm text-slate-400 transition-colors hover:text-white">Falar com a equipe</Link>
           <a href="https://codexa-web.online" target="_blank" rel="noreferrer" className="mt-3 block text-sm text-slate-400 transition-colors hover:text-white">codexa-web.online</a>
         </div>
@@ -33,5 +33,5 @@ export function SiteFooter() {
 }
 
 function FooterLinks({ title, links }: { title: string; links: string[][] }) {
-  return <div><h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-300">{title}</h2><ul className="mt-5 grid gap-3">{links.map(([label, href]) => <li key={label}>{href.startsWith("/") ? <Link href={href} className="text-sm text-slate-400 transition-colors hover:text-white">{label}</Link> : <a href={href} target="_blank" rel="noreferrer" className="text-sm text-slate-400 transition-colors hover:text-white">{label}</a>}</li>)}</ul></div>;
+  return <div><h2 className="text-xs font-black uppercase tracking-[0.18em] text-slate-300">{title}</h2><ul className="mt-5 grid gap-3">{links.map(([label, href]) => <li key={label}>{href.startsWith("/") ? <Link href={href} className="text-sm text-slate-400 transition-colors hover:text-white">{label}</Link> : <a href={href} target="_blank" rel="noreferrer" className="text-sm text-slate-400 transition-colors hover:text-white">{label}</a>}</li>)}</ul></div>;
 }

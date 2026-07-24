@@ -96,10 +96,10 @@ export function FoundersSection() {
                 }`}
               >
                 <span className="absolute left-7 top-7 h-px w-10 bg-green sm:left-10 sm:top-10 lg:left-14 lg:top-12" aria-hidden="true" />
-                <h3 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                <h3 className="text-3xl font-[850] tracking-[-.04em] text-white sm:text-4xl">
                   {founder.name}
                 </h3>
-                <p className="mt-2 text-sm font-semibold text-green-strong">{founder.role}</p>
+                <p className="mt-2 text-sm font-extrabold text-green-strong">{founder.role}</p>
                 <p className="mt-6 max-w-md text-base leading-relaxed text-slate-400">{founder.bio}</p>
               </div>
             </article>
@@ -116,7 +116,7 @@ export function PrinciplesSection() {
       <div className="section-shell">
         <header className="mx-auto max-w-2xl text-center">
           <p className="section-eyebrow justify-center">Como construímos</p>
-          <h2 id="principles-title" className="mt-4 text-3xl font-semibold tracking-[-.035em] text-white sm:text-5xl">Confiança nasce do processo.</h2>
+          <h2 id="principles-title" className="mt-4 text-3xl font-black tracking-[-.065em] text-white sm:text-5xl">Confiança nasce do processo.</h2>
           <p className="mt-5 leading-7 text-slate-400">Princípios simples orientam cada escolha — do primeiro rascunho à evolução contínua do produto.</p>
         </header>
         <div className="mt-14 grid gap-5 md:grid-cols-3">
@@ -126,7 +126,7 @@ export function PrinciplesSection() {
                 <span className="grid h-11 w-11 place-items-center rounded-xl bg-green/10 text-green"><Icon className="h-5 w-5" aria-hidden="true" /></span>
                 <span className="text-xs font-medium text-white/30">0{index + 1}</span>
               </div>
-              <h3 className="mt-8 text-xl font-semibold text-white">{title}</h3>
+              <h3 className="mt-8 text-xl font-[850] text-white">{title}</h3>
               <p className="mt-3 text-sm leading-7 text-slate-400">{text}</p>
             </article>
           ))}
@@ -142,13 +142,13 @@ export function PortfolioSection() {
       <div className="section-shell">
         <header className="text-center">
           <p className="section-eyebrow justify-center">Portfólio</p>
-          <h2 id="portfolio-title" className="mt-4 text-3xl font-semibold tracking-[-.035em] text-white sm:text-5xl">Um ecossistema em movimento.</h2>
+          <h2 id="portfolio-title" className="mt-4 text-3xl font-black tracking-[-.065em] text-white sm:text-5xl">Um ecossistema em movimento.</h2>
         </header>
         <div className="mt-12 grid gap-px overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-4">
           {portfolio.map(({ Icon, name, text }) => (
             <article key={name} data-particle-occluder className="bg-[#0a141c] p-7 transition-colors hover:bg-[#0d1922]">
               <Icon className="h-6 w-6 text-green" aria-hidden="true" />
-              <h3 className="mt-7 font-semibold text-white">{name}</h3>
+              <h3 className="mt-7 font-[850] text-white">{name}</h3>
               <p className="mt-2 text-sm leading-6 text-slate-400">{text}</p>
             </article>
           ))}
@@ -165,7 +165,7 @@ export function ContactCta() {
       <div className="section-shell flex flex-col items-start justify-between gap-10 md:flex-row md:items-end">
         <div>
           <p className="section-eyebrow">Próximo capítulo</p>
-          <h2 id="contact-cta-title" className="mt-4 max-w-2xl text-4xl font-semibold leading-[1.02] tracking-[-.045em] text-white sm:text-6xl">
+          <h2 id="contact-cta-title" className="mt-4 max-w-2xl text-4xl font-black leading-[.99] tracking-[-.065em] text-white sm:text-6xl">
             Uma boa ideia merece<br />virar um <span className="text-green">ótimo produto.</span>
           </h2>
           <p className="mt-5 text-slate-300">Conte o desafio. A gente pensa o próximo passo com você.</p>

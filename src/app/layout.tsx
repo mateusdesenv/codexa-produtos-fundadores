@@ -5,7 +5,7 @@ import { ContactProvider } from "@/components/ui/contact-dialog";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-primary",
   display: "swap",
 });
 

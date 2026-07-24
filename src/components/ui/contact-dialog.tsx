@@ -165,7 +165,7 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
                   <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-green/15 text-green ring-1 ring-border-strong">
                     <Check className="h-7 w-7" />
                   </div>
-                  <h2 id="contact-title" className="mt-5 text-xl font-bold text-foreground">
+                  <h2 id="contact-title" className="mt-5 text-xl font-[850] text-foreground">
                     Recebemos seu contato
                   </h2>
                   <p className="mx-auto mt-2 max-w-sm text-sm text-muted">
@@ -175,17 +175,17 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
                   <button
                     type="button"
                     onClick={close}
-                    className="mt-6 rounded-full bg-green px-6 py-2.5 text-sm font-semibold text-ink transition-transform hover:scale-[1.03]"
+                    className="mt-6 rounded-full bg-green px-6 py-2.5 text-sm font-[850] text-ink transition-transform hover:scale-[1.03]"
                   >
                     Fechar
                   </button>
                 </div>
               ) : (
                 <>
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-green">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-green">
                     Fale com a Codexa
                   </p>
-                  <h2 id="contact-title" className="mt-2 text-2xl font-bold text-foreground">
+                  <h2 id="contact-title" className="mt-2 text-2xl font-[850] text-foreground">
                     Entre em contato
                   </h2>
                   <p className="mt-1.5 text-sm text-muted">
@@ -264,7 +264,7 @@ export function ContactProvider({ children }: { children: React.ReactNode }) {
                     <button
                       type="submit"
                       disabled={status === "submitting"}
-                      className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-green px-6 py-3 text-sm font-semibold text-ink transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+                      className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-green px-6 py-3 text-sm font-[850] text-ink transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       {status === "submitting" ? (
                         <>

@@ -159,7 +159,13 @@ function sampleLogo(image: HTMLImageElement, count: number): GalaxyParticle[] {
   });
 }
 
-export function HeroParticleOrb() {
+export function HeroParticleOrb({
+  logoScale = 1,
+  scrollEffects = true,
+}: {
+  logoScale?: number;
+  scrollEffects?: boolean;
+} = {}) {
   const anchorRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mounted, setMounted] = useState(false);
@@ -203,17 +209,20 @@ export function HeroParticleOrb() {
     const draw = (timestamp = 0) => {
       context.clearRect(0, 0, width, height);
       const time = reducedMotion ? 0 : timestamp * 0.001;
-      const scrollY = window.scrollY;
+      const scrollY = scrollEffects ? window.scrollY : 0;
       const anchorBounds = anchor.getBoundingClientRect();
       const heroCenterX = anchorBounds.left + anchorBounds.width * 0.5;
       const heroCenterY = anchorBounds.top + anchorBounds.height * 0.5;
-      const heroScale = Math.min(anchorBounds.width, anchorBounds.height) * 0.33;
-      const travelProgress = reducedMotion
-        ? scrollY > 24 ? 1 : 0
-        : smootherstep(scrollY / Math.max(compact ? 640 : 900, height * 1.12));
+      const heroScale =
+        Math.min(anchorBounds.width, anchorBounds.height) * 0.33 * logoScale;
+      const travelProgress = scrollEffects
+        ? reducedMotion
+          ? scrollY > 24 ? 1 : 0
+          : smootherstep(scrollY / Math.max(compact ? 640 : 900, height * 1.12))
+        : 0;
 
       const contactBounds = document.getElementById("contact-particle-target")?.getBoundingClientRect();
-      const contactProgress = contactBounds
+      const contactProgress = scrollEffects && contactBounds
         ? reducedMotion
           ? contactBounds.top < height * 0.78 ? 1 : 0
           : smootherstep((height * 0.94 - contactBounds.top) / (height * 0.48))
@@ -449,7 +458,7 @@ export function HeroParticleOrb() {
       window.removeEventListener("resize", resize);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [mounted]);
+  }, [logoScale, mounted, scrollEffects]);
 
   return (
     <div ref={anchorRef} className="hero-particle-orb hero-particle-c" aria-hidden="true">

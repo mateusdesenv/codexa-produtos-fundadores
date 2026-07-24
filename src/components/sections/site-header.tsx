@@ -36,7 +36,7 @@ export function SiteHeader() {
 
         <nav aria-label="Navegação principal" className="hidden items-center gap-7 lg:flex">
           {navigation.map(([label, href]) => (
-            <Link key={href} href={href} className="relative py-3 text-sm font-medium text-slate-400 transition-colors hover:text-white after:absolute after:inset-x-0 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-green after:transition-transform hover:after:scale-x-100">
+            <Link key={href} href={href} className="relative py-3 text-sm font-bold text-slate-400 transition-colors hover:text-white after:absolute after:inset-x-0 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-green after:transition-transform hover:after:scale-x-100">
               {label}
             </Link>
           ))}
@@ -63,7 +63,7 @@ export function SiteHeader() {
         <nav id="mobile-menu" aria-label="Navegação mobile" className="border-t border-white/[.07] bg-[#071019] py-5 shadow-2xl lg:hidden">
           <div className="mx-auto grid max-w-[1440px] gap-1 px-[var(--page-gutter)]">
             {navigation.map(([label, href]) => (
-              <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-slate-200 hover:bg-white/[.05] hover:text-green">
+              <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="flex min-h-12 items-center rounded-xl px-4 text-base font-bold text-slate-200 hover:bg-white/[.05] hover:text-green">
                 {label}
               </Link>
             ))}

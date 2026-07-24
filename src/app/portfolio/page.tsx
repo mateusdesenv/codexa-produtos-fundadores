@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PortfolioGallery } from "@/components/portfolio/portfolio-gallery";
-import { StaticParticleLogo } from "@/components/portfolio/static-particle-logo";
+import { HeroParticleOrb } from "@/components/sections/hero-particle-orb";
 import { SiteFooter } from "@/components/sections/site-footer";
 import { SiteHeader } from "@/components/sections/site-header";
 import { getPortfolioItems, type PortfolioItem } from "@/lib/portfolio";
@@ -30,7 +30,7 @@ export default async function PortfolioPage() {
       <SiteHeader />
       <main id="conteudo" className="portfolio-page flex-1" tabIndex={-1}>
         <section className="portfolio-hero" aria-labelledby="portfolio-page-title">
-          <StaticParticleLogo />
+          <HeroParticleOrb logoScale={0.7} scrollEffects={false} />
           <div className="section-shell relative z-10">
             <Link href="/" className="portfolio-back">
               Codexa / Portfólio

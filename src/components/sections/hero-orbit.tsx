@@ -21,7 +21,7 @@ function WindowBar() {
 /** Fita diagonal "Em breve" no canto do card. */
 function ComingSoonRibbon() {
   return (
-    <span className="pointer-events-none absolute -right-9 top-3 z-20 rotate-45 bg-green px-9 py-[3px] text-center text-[9px] font-bold uppercase tracking-wider text-ink shadow-md">
+    <span className="pointer-events-none absolute -right-9 top-3 z-20 rotate-45 bg-green px-9 py-[3px] text-center text-[9px] font-black uppercase tracking-wider text-ink shadow-md">
       Em breve
     </span>
   );
@@ -110,7 +110,7 @@ function OrbitCard({ product }: { product: Product }) {
         className="aspect-[16/10] w-full object-cover object-top"
       />
       <span className="flex items-center justify-between gap-1 px-2 py-1.5 sm:px-2.5">
-        <span className="truncate text-[11px] font-semibold text-foreground sm:text-xs">
+        <span className="truncate text-[11px] font-extrabold text-foreground sm:text-xs">
           {product.name}
         </span>
         {product.comingSoon ? null : (
