@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { useContact } from "@/components/ui/contact-dialog";
 
 const navigation = [
-  ["Produtos", "#produtos"],
-  ["Fundadores", "#fundadores"],
-  ["Como construímos", "#depoimentos"],
-  ["Portfólio", "#portfolio"],
-  ["Contato", "#contato"],
+  ["Produtos", "/#produtos"],
+  ["Fundadores", "/#fundadores"],
+  ["Como construímos", "/#depoimentos"],
+  ["Portfólio", "/portfolio"],
+  ["Contato", "/#contato"],
 ];
 
 export function SiteHeader() {
@@ -29,15 +30,15 @@ export function SiteHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/[.07] bg-[#050a12]/82 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-[var(--page-gutter)]">
-        <a href="#top" aria-label="Codexa — início" className="relative z-10 shrink-0">
+        <Link href="/" aria-label="Codexa — início" className="relative z-10 shrink-0">
           <Logo height={27} />
-        </a>
+        </Link>
 
         <nav aria-label="Navegação principal" className="hidden items-center gap-7 lg:flex">
           {navigation.map(([label, href]) => (
-            <a key={href} href={href} className="relative py-3 text-sm font-medium text-slate-400 transition-colors hover:text-white after:absolute after:inset-x-0 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-green after:transition-transform hover:after:scale-x-100">
+            <Link key={href} href={href} className="relative py-3 text-sm font-medium text-slate-400 transition-colors hover:text-white after:absolute after:inset-x-0 after:bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-green after:transition-transform hover:after:scale-x-100">
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -62,9 +63,9 @@ export function SiteHeader() {
         <nav id="mobile-menu" aria-label="Navegação mobile" className="border-t border-white/[.07] bg-[#071019] py-5 shadow-2xl lg:hidden">
           <div className="mx-auto grid max-w-[1440px] gap-1 px-[var(--page-gutter)]">
             {navigation.map(([label, href]) => (
-              <a key={href} href={href} onClick={() => setMenuOpen(false)} className="flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-slate-200 hover:bg-white/[.05] hover:text-green">
+              <Link key={href} href={href} onClick={() => setMenuOpen(false)} className="flex min-h-12 items-center rounded-xl px-4 text-base font-medium text-slate-200 hover:bg-white/[.05] hover:text-green">
                 {label}
-              </a>
+              </Link>
             ))}
             <button type="button" onClick={() => { setMenuOpen(false); open(); }} className="button-primary mt-3 sm:hidden">
               Falar com a Codexa
